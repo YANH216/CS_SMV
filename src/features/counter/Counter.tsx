@@ -61,6 +61,12 @@ export default function Counter() {
         >
           Add If Odd
         </button>
+        <embed 
+          src="https://s.xlzys.com/play/BeX6Q2Vb" 
+          type=""
+          width="400px"
+          height="350px"
+        />
       </div>
     </div>
   )
