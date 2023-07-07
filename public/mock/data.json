@@ -1,0 +1,47 @@
+{
+    "homeContentData": [
+        {
+            "id": "content1",
+            "content": "image1"
+        },   
+        {
+            "id": "content2",
+            "content": "image2"
+        },  
+        {
+            "id": "content3",
+            "content": "image3"
+        },    
+        {
+            "id": "content4",
+            "content": "image4"
+        },   
+        {
+            "id": "content5",
+            "content": "image5"
+        },  
+        {
+            "id": "content6",
+            "content": "image6"
+        },   
+        {
+            "id": "content7",
+            "content": "image7"
+        },  
+        {
+            "id": "content8",
+            "content": "image8"
+        },    
+        {
+            "id": "content9",
+            "content": "image9"
+        },   
+        {
+            "id": "content10",
+            "content": "image10"
+        },  
+        {
+            "id": "content11",
+            "content": "image11"
+        }]
+}

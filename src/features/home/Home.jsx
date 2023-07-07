@@ -1,10 +1,30 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Layout, Menu, theme } from "antd"
+import { useNavigate } from 'react-router-dom'
+import { reqHomeContentData } from '../../http'
 import styles from './Home.module.css'
 
 const { Header, Content, Footer } = Layout
 
 export default function Home() {
+	const navigate = useNavigate()
+
+	const [homeContent, setHomeContent] = useState([])
+
+	const getHomeContent = async () => {
+		const res = await reqHomeContentData()
+		setHomeContent(res.homeContentData)
+	}
+
+	useEffect(() => {
+		getHomeContent()
+	} ,[])
+
+	
+
+	const handleClickRouteChange = () => {
+		navigate('/three', {replace: true})
+	}
 	const {
 		token: { colorBgContainer },
 	} = theme.useToken()
@@ -54,21 +74,16 @@ export default function Home() {
 								<span className='recommendHeader-right'>recommend</span>
 							</div>
 							<div className={styles.recommendContent}>
-								<div className={styles.recommendContentItem}>image</div>
-								<div className={styles.recommendContentItem}>image</div>
-								<div className={styles.recommendContentItem}>image</div>
-								<div className={styles.recommendContentItem}>image</div>
-								<div className={styles.recommendContentItem}>image</div>
-								<div className={styles.recommendContentItem}>image</div>
-								<div className={styles.recommendContentItem}>image</div>
-								<div className={styles.recommendContentItem}>image</div>
-								<div className={styles.recommendContentItem}>image</div>
-								<div className={styles.recommendContentItem}>image</div>
-								<div className={styles.recommendContentItem}>image</div>
+								{
+									homeContent.map(item => (
+										<div className={styles.recommendContentItem} key={item.id}>{item.content}</div>
+									))
+								}
 							</div>
 						</div>
 					</div>
 				</Content>
+				<button className='btn-linkToThree' onClick={handleClickRouteChange}>点击跳转three界面</button>
 				<Footer 
 					style={{
 						textAlign: 'center',

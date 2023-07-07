@@ -1,8 +1,9 @@
 import React from 'react'
 import { useState, useRef } from 'react'
+import socket from '../../ws'
 
 const Chat = React.memo(() => {
-	const socket = new WebSocket('ws://localhost:8080')
+
 
 	socket.addEventListener('open', () => {
 		console.log('welcome')
