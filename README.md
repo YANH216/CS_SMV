@@ -7,3 +7,4 @@ redux-toolkit
 websocket
 ts
 threejs
+GSAP
