@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as THREE from 'three'
+import { gsap } from 'gsap'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
-export default function Three() {
+export default function Gsap() {
+  
   const getWindowSize = () => (
     {
       innerWidth: window.innerWidth,
       innerHeight: window.innerHeight
     }
-  )
-
+    )
   const [windowSize, setWindowSize] = useState(getWindowSize())
+
   // 监听页面变化
   const handleResize = () => {
     setWindowSize(getWindowSize())
@@ -19,11 +21,6 @@ export default function Three() {
 
   const navigate = useNavigate()
 
-  const handleClickBackHome = () => {
-    navigate('/', {replace: true})
-  }
-  // 创建时钟
-  const clock = new THREE.Clock()
   // 创建坐标系
   const axesHelper = new THREE.AxesHelper( 5 )
   // 创建场景
@@ -51,41 +48,39 @@ export default function Three() {
 
   // 需要在所有定义之后
   controls.update()
-  // 定义动画ID
-  let AnimationID
-  // 定义动画方法
-  const animate = (timeStampPerMs) => {
-    // console.log(timeStampPerMs);  时间戳  一帧动画的时间戳
-    // 通过requestAnimationFrame提供的时间戳，单位为毫秒
-    // 时间戳 单位为毫秒， 除1000 换算成秒
-    // let timeStampPerS = timeStampPerMs / 1000  
 
-    // 通过THREE内置方法，Clock  获取当前时间戳  单位为秒
-    let timeStampPerS = clock.getElapsedTime()
-
-    // 与动画单程总时间 5 取余  当时间超过5秒 重新从0开始
-    const time = timeStampPerS % 5
-
-
-    // 定义速度  1单位每秒
-    let speed = 1
-
-    // 定义变向标识
-    // 0为向上  1为向下 
-    // 单程时间为 5  计算目前时间已经走过多少趟  与 2 取余 判断方向
-    let change = parseInt(timeStampPerS / 5) % 2
-
-    // 计算当前物体所在位置  速度为1单位每秒
-    if (!change) {
-      cube.position.y = time * speed
-    } else {
-      cube.position.y = (5 - time) * speed
+  // 控制物体移动
+  const move = gsap.to(
+    cube.position, {
+      // 哪个轴
+      y: 5, 
+      // 周期
+      duration: 5, 
+      // 运动模式
+      ease: "power3.inOut",
+      // 重复次数， 无限次为 -1
+      repeat: -1,
+      // 往返
+      yoyo: "true",
+      onStart: () => {
+        console.log("Animation Start");
+      }
+    },
+  )
+  // 控制物体旋转
+  const rotation = gsap.to(
+    cube.rotation, {
+      y: 2* Math.PI,
+      duration: 5,
+      ease: "power3.inOut",
+      repeat: -1,
     }
+  )
+  let renderID
+  // 定义渲染方法
+  const render = () => {
 
-    AnimationID = requestAnimationFrame( animate )
-    // 控制图形旋转
-    cube.rotation.x += 0.01
-    cube.rotation.y += 0.01
+    renderID = requestAnimationFrame( render )
 
     controls.update()
     // 渲染场景
@@ -96,8 +91,27 @@ export default function Three() {
     const container = document.getElementById("WebGL-output")
     container.appendChild( renderer.domElement )
 
-    animate()
+    render()
   }
+
+  const handleClickBackHome = () => {
+    navigate('/', {replace: true})
+  }
+
+  const handleClickControlAnimation = () => {
+    // 判断是否在运动中
+    if (move.isActive()) {
+      // 停止
+      move.pause()
+      rotation.pause()
+    } else {
+      // 恢复
+      move.resume()
+      rotation.resume()
+    }
+  }
+
+  
 
   useEffect(() => {
     // 初始化3D图形
@@ -106,7 +120,7 @@ export default function Three() {
     window.addEventListener("resize", handleResize)
     return () => {
       // 停止动画
-      cancelAnimationFrame(AnimationID)
+      cancelAnimationFrame(renderID)
       // 停止监听
       window.removeEventListener("resize", handleResize)
     }
@@ -115,8 +129,9 @@ export default function Three() {
 
   return (
     <>
-      <span>PAGE THREE</span>
+      <span>PAGE GSAP</span>
       <button onClick={handleClickBackHome}>back Home</button>
+      <button onClick={handleClickControlAnimation}>Anination START/PAUSE</button>
       <div id="WebGL-output"></div>
     </>
   )

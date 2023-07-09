@@ -10,10 +10,12 @@ export default function Home() {
 	const navigate = useNavigate()
 
 	const [homeContent, setHomeContent] = useState([])
+	const [homeBtn, setHomeBtn] = useState([])
 
 	const getHomeContent = async () => {
 		const res = await reqHomeContentData()
 		setHomeContent(res.homeContentData)
+		setHomeBtn(res.homeButtonData)
 	}
 
 	useEffect(() => {
@@ -22,8 +24,9 @@ export default function Home() {
 
 	
 
-	const handleClickRouteChange = () => {
-		navigate('/three', {replace: true})
+	const handleClickRouteChange = (id) => {
+		console.log(id);
+		navigate(`/${id}`, {replace: true})
 	}
 	const {
 		token: { colorBgContainer },
@@ -76,14 +79,27 @@ export default function Home() {
 							<div className={styles.recommendContent}>
 								{
 									homeContent.map(item => (
-										<div className={styles.recommendContentItem} key={item.id}>{item.content}</div>
+										<div 
+											className={styles.recommendContentItem} 
+											key={item.id}
+										>{item.content}
+										</div>
 									))
 								}
 							</div>
 						</div>
 					</div>
 				</Content>
-				<button className='btn-linkToThree' onClick={handleClickRouteChange}>点击跳转three界面</button>
+				{
+					homeBtn.map((item) => 
+						<button 
+							key={item.id}
+							className={item.className} 
+							onClick={() => handleClickRouteChange(item.id)}
+						>点击跳转{item.content}界面
+						</button>
+					)
+				}
 				<Footer 
 					style={{
 						textAlign: 'center',

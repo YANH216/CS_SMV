@@ -43,5 +43,18 @@
         {
             "id": "content11",
             "content": "image11"
-        }]
+        }
+    ],
+    "homeButtonData": [
+        {
+            "id": "three",
+            "content": "three",
+            "className": "btn-LinkToThree"
+        },
+        {
+            "id": "gsap",
+            "content": "gsap",
+            "className": "btn-LinkToGsap"
+        }
+    ]
 }
