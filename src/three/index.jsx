@@ -6,15 +6,29 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 export default function Three() {
   const getWindowSize = () => (
     {
-      innerWidth: window.innerWidth,
-      innerHeight: window.innerHeight
+      width: window.innerWidth,
+      height: window.innerHeight,
+      aspect: window.innerWidth / window.innerHeight,
+      pixelRatio: window.devicePixelRatio
     }
   )
 
-  const [windowSize, setWindowSize] = useState(getWindowSize())
+  let windowSize = getWindowSize()
+
+  // 监听页面变化
   // 监听页面变化
   const handleResize = () => {
-    setWindowSize(getWindowSize())
+    windowSize = getWindowSize()
+
+    // 更新摄像头视锥体宽高比
+    camera.aspect = windowSize.aspect
+    // 更新摄像头的投影矩阵
+    // 在任何参数改变后 必须调用
+    camera.updateProjectionMatrix()
+    // 更新渲染器
+    renderer.setSize(windowSize.width, windowSize.height)
+    // 设置渲染器的像素比
+    renderer.setPixelRatio(windowSize.pixelRatio)
   }
 
   const navigate = useNavigate()
@@ -29,11 +43,11 @@ export default function Three() {
   // 创建场景
   const scene = new THREE.Scene()
   // 创建摄像头  定义视锥
-  const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000)
+  const camera = new THREE.PerspectiveCamera( 75, windowSize.aspect, 0.1, 1000)
   // 创建渲染器
   const renderer = new THREE.WebGLRenderer()
   // 定义渲染器大小
-  renderer.setSize( windowSize.innerWidth, windowSize.innerHeight )
+  renderer.setSize( windowSize.width, windowSize.height )
   // 定义3D图形形状
   const geometry = new THREE.BoxGeometry( 1, 1, 1 )
 

@@ -1,39 +1,36 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import * as dat from 'dat.gui'
+import styles from './index.module.css'
 
 export default function Gsap() {
+  const navigate = useNavigate()
   
   const getWindowSize = () => (
     {
-      innerWidth: window.innerWidth,
-      innerHeight: window.innerHeight
+      width: window.innerWidth,
+      height: window.innerHeight,
+      aspect: window.innerWidth / window.innerHeight,
+      pixelRatio: window.devicePixelRatio
     }
-    )
-  const [windowSize, setWindowSize] = useState(getWindowSize())
-
-  // 监听页面变化
-  const handleResize = () => {
-    setWindowSize(getWindowSize())
-  }
-
-  const navigate = useNavigate()
+  )
+  let windowSize = getWindowSize()
 
   // 创建坐标系
   const axesHelper = new THREE.AxesHelper( 5 )
   // 创建场景
   const scene = new THREE.Scene()
   // 创建摄像头  定义视锥
-  const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000)
+  const camera = new THREE.PerspectiveCamera( 75, windowSize.aspect, 0.1, 1000)
   // 创建渲染器
   const renderer = new THREE.WebGLRenderer()
   // 定义渲染器大小
-  renderer.setSize( windowSize.innerWidth, windowSize.innerHeight )
+  renderer.setSize( windowSize.width, windowSize.height )
   // 定义3D图形形状
   const geometry = new THREE.BoxGeometry( 1, 1, 1 )
-
   // 定义3D图形材质
   const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
   // 创建3D图形
@@ -42,10 +39,10 @@ export default function Gsap() {
   scene.add( cube, axesHelper )
   // 定义摄像头位置
   camera.position.set( 10, 0, 0 )
-
   // 创建轨道控制器
   const controls = new OrbitControls( camera, renderer.domElement )
-
+  // 设置控制器阻尼
+  controls.enableDamping = true 
   // 需要在所有定义之后
   controls.update()
 
@@ -67,6 +64,8 @@ export default function Gsap() {
       }
     },
   )
+
+
   // 控制物体旋转
   const rotation = gsap.to(
     cube.rotation, {
@@ -76,39 +75,90 @@ export default function Gsap() {
       repeat: -1,
     }
   )
+
+
   let renderID
   // 定义渲染方法
   const render = () => {
 
     renderID = requestAnimationFrame( render )
-
+    // 更新控制器
     controls.update()
     // 渲染场景
     renderer.render( scene, camera )
   }
+
+  // 初始化GUI变量控制界面
+  // 传入参数对象
+  // GUI名称：name 默认为MY GUI
+  // add(需要修改的对象<object>, '对象上的哪个属性'<string>)
+  // 控制条的最小值: min  类型number
+  // 控制条的最大值: max 类型number
+  // 变化间隔: step 类型number
+  // 名称: string
+  const initGUI = () => {
+    const gui = new dat.GUI({name: 'MY GUI'})
+    gui
+      .add(cube.position, 'z')
+      .min(0)
+      .max(5)
+      .step(0.1)
+      .name('移动z轴')
+      .onFinishChange(value => {
+        console.log("current value", value);
+      })
+  }
+
+
   // 初始化方法
   const initThree = () => {
     const container = document.getElementById("WebGL-output")
     container.appendChild( renderer.domElement )
-
+    console.log("didMount");
     render()
   }
 
-  const handleClickBackHome = () => {
-    navigate('/', {replace: true})
+  // 监听页面变化
+  const handleResize = () => {
+    windowSize = getWindowSize()
+
+    // 更新摄像头视锥体宽高比
+    camera.aspect = windowSize.aspect
+    // 更新摄像头的投影矩阵
+    // 在任何参数改变后 必须调用
+    camera.updateProjectionMatrix()
+    // 更新渲染器
+    renderer.setSize(windowSize.width, windowSize.height)
+    // 设置渲染器的像素比
+    renderer.setPixelRatio(windowSize.pixelRatio)
   }
 
+  // 点击按钮页面跳转
+  const handleClickBackHome = () => {
+    navigate('/', {replace: true})
+  } 
+
+  // 点击按钮控制动画
   const handleClickControlAnimation = () => {
     // 判断是否在运动中
     if (move.isActive()) {
-      // 停止
       move.pause()
       rotation.pause()
+      console.log('Animation Stop');
     } else {
-      // 恢复
       move.resume()
       rotation.resume()
+      console.log('Animation Start');
     }
+  }
+
+  // 点击控制是否全屏
+  const handleClickControlFullscreen = () => {
+    // 请求全屏显示
+    renderer.domElement.requestFullscreen()
+    console.log(render.domElement);
+    // 退出全屏
+    // document.exitFullScreen()
   }
 
   
@@ -116,6 +166,8 @@ export default function Gsap() {
   useEffect(() => {
     // 初始化3D图形
     initThree()
+    // 初始化GUI
+    initGUI()
     // 开启页面监听
     window.addEventListener("resize", handleResize)
     return () => {
@@ -130,8 +182,9 @@ export default function Gsap() {
   return (
     <>
       <span>PAGE GSAP</span>
-      <button onClick={handleClickBackHome}>back Home</button>
-      <button onClick={handleClickControlAnimation}>Anination START/PAUSE</button>
+      <button className={styles.btn} onClick={handleClickBackHome}>back Home</button>
+      <button className={styles.btn} onClick={handleClickControlAnimation}>Anination START/PAUSE</button>
+      <button className={styles.btn} onClick={handleClickControlFullscreen}>FULLSCREEN</button>
       <div id="WebGL-output"></div>
     </>
   )
