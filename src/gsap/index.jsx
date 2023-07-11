@@ -29,14 +29,42 @@ export default function Gsap() {
   const renderer = new THREE.WebGLRenderer()
   // 定义渲染器大小
   renderer.setSize( windowSize.width, windowSize.height )
-  // 定义3D图形形状
-  const geometry = new THREE.BoxGeometry( 1, 1, 1 )
-  // 定义3D图形材质
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-  // 创建3D图形
-  const cube = new THREE.Mesh( geometry, material )
+
+  
+  // 定义3D图形
+  const createCube = () => {
+    // 定义3D图形形状
+    const geometry = new THREE.BoxGeometry( 1, 1, 1 )
+    // 定义3D图形材质
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    // 创建3D图形
+    return new THREE.Mesh( geometry, material )
+  }
+
+  const createBufferGeometry = () => {
+    // 创建图形
+    const geometry = new THREE.BufferGeometry()
+    // 定义顶点 面由两个三角形面组成 有两个重叠的顶点
+    // 按照要画的线来确定顶点位置,不能随意更换位置
+    const vertices = new Float32Array([
+      -1.0, 1.0, 2.0,
+      1.0, 1.0, 2.0,
+      1.0, -1.0, 2.0,
+
+      1.0, -1.0, 2.0,
+      -1.0, -1.0, 2.0,
+      -1.0, 1.0, 2.0
+    ])
+    // 每三个一组, x, y, z
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    return new THREE.Mesh(geometry, material)
+  }
+  const cube = createCube()
+  const bufferGeometry = createBufferGeometry()
+  
   // 将3D图形, 坐标系添加进场景
-  scene.add( cube, axesHelper )
+  scene.add( cube, bufferGeometry, axesHelper )
   // 定义摄像头位置
   camera.position.set( 10, 0, 0 )
   // 创建轨道控制器
@@ -90,23 +118,38 @@ export default function Gsap() {
 
   // 初始化GUI变量控制界面
   // 传入参数对象
-  // GUI名称：name 默认为MY GUI
-  // add(需要修改的对象<object>, '对象上的哪个属性'<string>)
-  // 控制条的最小值: min  类型number
-  // 控制条的最大值: max 类型number
-  // 变化间隔: step 类型number
-  // 名称: string
   const initGUI = () => {
-    const gui = new dat.GUI({name: 'MY GUI'})
+    const gui = new dat.GUI({name: 'MY GUI'})  // GUI名称：name 默认为MY GUI
+
+    const params = {
+      color: '#ffff00',
+      fn: handleClickControlAnimation  // 动画停止与开始
+    }
+
     gui
-      .add(cube.position, 'z')
-      .min(0)
-      .max(5)
-      .step(0.1)
-      .name('移动z轴')
-      .onFinishChange(value => {
+      .add(cube.position, 'z')  // add(需要修改的对象<object>, '对象上的哪个属性'<string>)
+      .min(0)  // 控制条的最小值: min  类型number
+      .max(5)   // 控制条的最大值: max 类型number
+      .step(0.1)    // 变化间隔: step 类型number
+      .name('移动z轴')    // 名称: string
+      .onFinishChange(value => {   // 完成更改时的回调
         console.log("current value", value);
       })
+    
+    gui
+      .add(params, 'fn')
+      .name('ANIMATION START/STOP')
+
+    // 添加一个下拉框
+    const folder = gui.addFolder('颜色&是否可见')
+    // 改变物体颜色
+    folder
+      .addColor(params, 'color')
+      .onChange(value => {
+        cube.material.color.set(value)
+      })
+
+    folder.add(cube, 'visible')
   }
 
 
@@ -114,7 +157,6 @@ export default function Gsap() {
   const initThree = () => {
     const container = document.getElementById("WebGL-output")
     container.appendChild( renderer.domElement )
-    console.log("didMount");
     render()
   }
 
