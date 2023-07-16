@@ -35,8 +35,13 @@ export default function Gsap() {
   const createCube = () => {
     // 定义3D图形形状
     const geometry = new THREE.BoxGeometry( 1, 1, 1 )
+    // 创建纹理加载器并加载纹理
+    const texture = new THREE.TextureLoader().load('http://localhost.charlesproxy.com:8080/texture')
     // 定义3D图形材质
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    const material = new THREE.MeshBasicMaterial({ 
+      color: 0xff0000,
+      map: texture
+    })
     // 创建3D图形
     return new THREE.Mesh( geometry, material )
   }
