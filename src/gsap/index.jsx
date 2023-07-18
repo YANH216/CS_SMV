@@ -30,16 +30,43 @@ export default function Gsap() {
   // 定义渲染器大小
   renderer.setSize( windowSize.width, windowSize.height )
 
+  // 添加加载管理器
+  const loadingManager = new THREE.LoadingManager()
+  loadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
+    console.log('Loading file: ' + url + '已加载' + itemsLoaded + '一共需要加载' + itemsTotal);
+  }
+  loadingManager.onLoad = function () {
+    console.log('已全部加载完成');
+  }
+  loadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
+    console.log('Loading file: ' + url + '已加载' + itemsLoaded + '一共需要加载' + itemsTotal);
+  }
   
   // 定义3D图形
-  const createCube = () => {
+  const createCube = (loadingManager) => {
     // 定义3D图形形状
-    const geometry = new THREE.BoxGeometry( 1, 1, 1 )
+    const geometry = new THREE.BoxGeometry( 2, 2, 2 )
     // 创建纹理加载器并加载纹理
-    const texture = new THREE.TextureLoader().load('http://localhost.charlesproxy.com:8080/texture')
+    const texture = new THREE.TextureLoader(loadingManager).load('http://localhost.charlesproxy.com:8080/texture')
+    // 设置纹理偏移
+    // texture.offset.set(0.5, 0.5)
+    // 设置旋转中心点 默认为 (0, 0)  即左下角
+    texture.center.set(0.5, 0.5)
+    // 设置纹理旋转
+    texture.rotation = Math.PI / 4
+    // 设置纹理重复
+    texture.repeat.set(2, 2)
+    // 设置纹理重复的同时  也要设置重复方式 不然纹理会被延伸
+    // 垂直方向重复
+    texture.wrapT = THREE.RepeatWrapping
+    // 水平方向   镜像重复
+    texture.wrapS = THREE.MirroredRepeatWrapping 
+    // 设置滤镜
+    texture.minFilter = THREE.NearestFilter
+    texture.magFilter = THREE.LinearFilter
     // 定义3D图形材质
     const material = new THREE.MeshBasicMaterial({ 
-      color: 0xff0000,
+      color: 0xffffff,
       map: texture
     })
     // 创建3D图形
@@ -65,8 +92,9 @@ export default function Gsap() {
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
     return new THREE.Mesh(geometry, material)
   }
-  const cube = createCube()
+  const cube = createCube(loadingManager)
   const bufferGeometry = createBufferGeometry()
+
   
   // 将3D图形, 坐标系添加进场景
   scene.add( cube, bufferGeometry, axesHelper )
