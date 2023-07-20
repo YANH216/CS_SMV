@@ -55,6 +55,11 @@
             "id": "gsap",
             "content": "gsap",
             "className": "btn-LinkToGsap"
+        },
+        {
+            "id": "meshStandardMaterial",
+            "content": "meshStandardMaterial",
+            "className": "btn-LinkToMeshStandardMaterial"
         }
     ]
 }

@@ -2,8 +2,9 @@ import { Route, Routes } from 'react-router-dom';
 import Counter from './features/counter/Counter';
 import Home from './features/home/Home';
 import Chat from './features/chat/Chat';
-import Three from './three';
-import Gsap from './gsap';
+import Three from './pages/three';
+import Gsap from './pages/gsap';
+import MeshStandardMaterial from './pages/meshStandardMaterial';
 import './App.css';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path='/chat' element= { <Chat/> }/>
         <Route path='/three' element= { <Three/> }/>
         <Route path='/gsap' element= { <Gsap/> }/>
+        <Route path='/meshStandardMaterial' element= { <MeshStandardMaterial/> }/>
       </Routes>
     </div>
   );
