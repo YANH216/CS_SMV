@@ -149,11 +149,10 @@ export default function Gsap() {
     renderer.render( scene, camera )
   }
 
+  const gui = new dat.GUI({name: 'MY GUI'})  // GUI名称：name 默认为MY GUI
   // 初始化GUI变量控制界面
   // 传入参数对象
   const initGUI = () => {
-    const gui = new dat.GUI({name: 'MY GUI'})  // GUI名称：name 默认为MY GUI
-
     const params = {
       color: '#ffff00',
       fn: handleClickControlAnimation  // 动画停止与开始
@@ -184,6 +183,13 @@ export default function Gsap() {
 
     folder.add(cube, 'visible')
   }
+
+  // 销毁GUI
+  const destroy = () => {
+    console.log('destroy');
+    gui.destroy()
+  }
+
 
 
   // 初始化方法
@@ -248,6 +254,9 @@ export default function Gsap() {
     return () => {
       // 停止动画
       cancelAnimationFrame(renderID)
+      // 销毁GUI  
+      // 由于在严格模式下初始化界面时 会执行一次componentWillUnmount也就是此处的生命周期函数中的方法，导致GUI提前删除，造成错误。故之后实际运行时，关闭严格模式
+      destroy()
       // 停止监听
       window.removeEventListener("resize", handleResize)
     }

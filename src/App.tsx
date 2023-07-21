@@ -15,7 +15,7 @@ function App() {
         <Route path='/chat' element= { <Chat/> }/>
         <Route path='/three' element= { <Three/> }/>
         <Route path='/gsap' element= { <Gsap/> }/>
-        <Route path='/meshStandardMaterial' element= { <MeshStandardMaterial/> }/>
+        <Route path='/meshStandardMaterial' element= { <MeshStandardMaterial></MeshStandardMaterial> }/>
       </Routes>
     </div>
   );

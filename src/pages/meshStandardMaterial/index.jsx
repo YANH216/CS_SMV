@@ -1,9 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import Dialog from '../../features/dialog/Dialog'
 
 export default function MeshStandardMaterial() {
+
+	// 页面状态  loading与complete
+	const [isLoading, setIsLoading] = useState(true)
+
 	const getWindowSize = () => (
 		{
 				width: window.innerWidth,
@@ -49,12 +54,14 @@ export default function MeshStandardMaterial() {
 	// 定义渲染器大小
 	renderer.setSize( windowSize.width, windowSize.height )
 
+	const loadingManager = new THREE.LoadingManager()
 
 	// 定义3D图形
 	// 添加纹理
-	const loader = new THREE.CubeTextureLoader()
+	const loader = new THREE.CubeTextureLoader(loadingManager)
 	loader.setPath('./textures/bridge/')
 	const textureCube = loader.load(['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg'])
+
 
 	// 定义材质
 	const materital = new THREE.MeshStandardMaterial({
@@ -81,20 +88,31 @@ export default function MeshStandardMaterial() {
 	const controls = new OrbitControls( camera, renderer.domElement )
 	// 需要在所有定义之后
 	controls.update()
-	const animate = () => {
-		requestAnimationFrame( animate )
+
+
+	const render = () => {
+		requestAnimationFrame( render )
 
 		controls.update()
 		renderer.render( scene, camera )
 	}
 
+
+	// 加载管理器
+	loadingManager.onStart = () => {
+	}
+
+	// 纹理加载完成时 渲染
+	loadingManager.onLoad = () => { 
+		render() 
+		setIsLoading(false)
+	}
 	
 	
 	// 初始化方法
 	const initThree = () => {
 		const container = document.getElementById("WebGL-output")
 		container.appendChild( renderer.domElement )
-		animate()
 	}
 
 	useEffect(() => {
@@ -111,9 +129,18 @@ export default function MeshStandardMaterial() {
 
 	return (
 		<>
-			<span>PAGE MeshNormalMaterial</span>
-			<button onClick={handleClickBackHome}>back Home</button>
-			<div id="WebGL-output"></div>
+			{
+				// 纹理是否加载完成
+				isLoading 
+				// 正在加载
+				&& <Dialog
+						content='Loading...'
+					/>
+			}
+			<div id="WebGL-output">
+				<span>PAGE MeshNormalMaterial</span>
+				<button onClick={handleClickBackHome}>back Home</button>
+			</div>
 		</>
 	)
 }
