@@ -60,6 +60,11 @@
             "id": "meshStandardMaterial",
             "content": "meshStandardMaterial",
             "className": "btn-LinkToMeshStandardMaterial"
+        },
+        {
+            "id": "lightAndShadow",
+            "content": "LightAndShadow",
+            "className": "btn-LinkToLightAndShadow"
         }
     ]
 }

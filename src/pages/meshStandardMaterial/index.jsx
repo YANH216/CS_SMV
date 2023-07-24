@@ -86,6 +86,8 @@ export default function MeshStandardMaterial() {
 
 	// 创建轨道控制器
 	const controls = new OrbitControls( camera, renderer.domElement )
+	// 设置控制器阻尼
+	controls.enableDamping = true
 	// 需要在所有定义之后
 	controls.update()
 

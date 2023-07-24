@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-import * as dat from 'dat.gui'
+import { initGUI } from '../../utils/gui'
 import styles from './index.module.css'
 
 export default function Gsap() {
@@ -33,13 +33,13 @@ export default function Gsap() {
   // 添加加载管理器
   const loadingManager = new THREE.LoadingManager()
   loadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
-    console.log('Loading file: ' + url + '已加载' + itemsLoaded + '一共需要加载' + itemsTotal);
+    // console.log('Loading file: ' + url + '已加载' + itemsLoaded + '一共需要加载' + itemsTotal);
   }
   loadingManager.onLoad = function () {
     console.log('已全部加载完成');
   }
   loadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
-    console.log('Loading file: ' + url + '已加载' + itemsLoaded + '一共需要加载' + itemsTotal);
+    // console.log('Loading file: ' + url + '已加载' + itemsLoaded + '一共需要加载' + itemsTotal);
   }
   
   // 定义3D图形
@@ -93,6 +93,7 @@ export default function Gsap() {
     return new THREE.Mesh(geometry, material)
   }
   const cube = createCube(loadingManager)
+  cube.name = 'cube'
   const bufferGeometry = createBufferGeometry()
 
   
@@ -149,10 +150,10 @@ export default function Gsap() {
     renderer.render( scene, camera )
   }
 
-  const gui = new dat.GUI({name: 'MY GUI'})  // GUI名称：name 默认为MY GUI
-  // 初始化GUI变量控制界面
+/*   // 初始化GUI变量控制界面
   // 传入参数对象
   const initGUI = () => {
+    const gui = new dat.GUI({name: 'MY GUI'})  // GUI名称：name 默认为MY GUI
     const params = {
       color: '#ffff00',
       fn: handleClickControlAnimation  // 动画停止与开始
@@ -182,14 +183,14 @@ export default function Gsap() {
       })
 
     folder.add(cube, 'visible')
-  }
 
-  // 销毁GUI
-  const destroy = () => {
-    console.log('destroy');
-    gui.destroy()
+    // 定义GUI销毁函数 闭包
+    const destroyGUI = () => {
+      gui.destroy()
+    }
+    return destroyGUI
   }
-
+ */
 
 
   // 初始化方法
@@ -247,16 +248,15 @@ export default function Gsap() {
   useEffect(() => {
     // 初始化3D图形
     initThree()
-    // 初始化GUI
-    initGUI()
+    // 初始化GUI,并获取其中的销毁方法
+    const destroyGUI = initGUI(cube, handleClickControlAnimation)
     // 开启页面监听
     window.addEventListener("resize", handleResize)
     return () => {
       // 停止动画
       cancelAnimationFrame(renderID)
-      // 销毁GUI  
-      // 由于在严格模式下初始化界面时 会执行一次componentWillUnmount也就是此处的生命周期函数中的方法，导致GUI提前删除，造成错误。故之后实际运行时，关闭严格模式
-      destroy()
+      // 销毁GUI  销毁GUI之后最外层的div并没有清除  只是清除了div内部的元素
+      destroyGUI()
       // 停止监听
       window.removeEventListener("resize", handleResize)
     }
