@@ -6,6 +6,7 @@ import Three from './pages/three';
 import Gsap from './pages/gsap';
 import MeshStandardMaterial from './pages/meshStandardMaterial';
 import LightAndShadow from './pages/lightAndShadow/LightShadow';
+import HDR from './pages/hdr/HDR';
 import './App.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path='/gsap' element= { <Gsap/> }/>
         <Route path='/meshStandardMaterial' element= { <MeshStandardMaterial/> }/>
         <Route path='/lightAndShadow' element= { <LightAndShadow/> }/>
+        <Route path='/hdr' element= { <HDR/> }/>
       </Routes>
     </div>
   );

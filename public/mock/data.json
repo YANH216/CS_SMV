@@ -65,6 +65,11 @@
             "id": "lightAndShadow",
             "content": "LightAndShadow",
             "className": "btn-LinkToLightAndShadow"
+        },
+        {
+            "id": "hdr",
+            "content": "Hdr",
+            "className": "btn-LinkToHdr"
         }
     ]
 }

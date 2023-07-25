@@ -135,6 +135,8 @@ export default function LightAndShadow() {
     // 渲染场景
     renderer.render( scene, camera )
   }
+
+
   // 初始化方法
   const initThree = () => {
     const container = document.getElementById("WebGL-output")
@@ -157,9 +159,10 @@ export default function LightAndShadow() {
 
   return (
     <>
-      <span>PAGE LightAndShadow</span>
-      <button onClick={handleClickBackHome}>back Home</button>
-      <div id="WebGL-output"></div>
+      <div id="WebGL-output">
+        <span>PAGE LightAndShadow</span>
+        <button onClick={handleClickBackHome}>back Home</button>
+      </div>
     </>
   )
 }
