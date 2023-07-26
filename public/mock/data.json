@@ -1,4 +1,22 @@
 {
+    "navigationBar": [
+        {
+            "key": "01",
+            "label": "THREEJS"
+        },
+        {
+            "key": "02",
+            "label": "WEBSOCKET"
+        },
+        {
+            "key": "03",
+            "label": "..."
+        },
+        {
+            "key": "04",
+            "label": "..."
+        }
+    ],
     "homeContentData": [
         {
             "id": "content1",
@@ -70,6 +88,12 @@
             "id": "hdr",
             "content": "Hdr",
             "className": "btn-LinkToHdr"
+        },
+        {
+            "id": "room",
+            "content": "Room",
+            "className": "btn-LinkToRoom"
         }
-    ]
+    ],
+    "status": "200"
 }

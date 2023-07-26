@@ -15,25 +15,33 @@ export default function HDR() {
   const camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000)
   const renderer = new THREE.WebGLRenderer()
   const scene = new THREE.Scene()
-
+  
+  
   const init = () => {
+    camera.position.set(-1, 0, 0)
+
+    const axesHelper = new THREE.AxesHelper( 5 )
+
     const container = document.getElementById("WebGL-output")
     container.appendChild( renderer.domElement )
-
-
+    
+    
     renderer.setPixelRatio( window.devicePixelRatio )
     renderer.setSize( window.innerWidth, window.innerHeight )
-
-
-
+    
+    
+    
     new RGBELoader().load('./textures/hdr/memorial.hdr', (texture) => {
+      
+      const geometry = new THREE.BoxGeometry(5, 5, 5)
+
       const material = new THREE.MeshBasicMaterial({ map: texture })
-
-      const geometry = new THREE.IcosahedronGeometry( 3, 15 )
-
-      const sphere = new THREE.Mesh(material, geometry)
-
-      scene.add(sphere)
+    
+      const sphere = new THREE.Mesh(geometry, material)
+      // 物体内部可见
+      sphere.geometry.scale(1, 1, -1)
+    
+      scene.add(sphere, axesHelper)
 
       render()
 
@@ -50,7 +58,7 @@ export default function HDR() {
     // 更新渲染器
     renderer.setSize(window.innerWidth, window.innerHeight)
 
-    render()
+    renderer.setPixelRatio( window.devicePixelRatio )
   }
 
   

@@ -266,7 +266,7 @@ export default function Gsap() {
   return (
     <>
       <div id="WebGL-output">
-      <span>PAGE GSAP</span>
+        <span>PAGE GSAP</span>
         <button className={styles.btn} onClick={handleClickBackHome}>back Home</button>
         <button className={styles.btn} onClick={handleClickControlAnimation}>Anination START/PAUSE</button>
         <button className={styles.btn} onClick={handleClickControlFullscreen}>FULLSCREEN</button>

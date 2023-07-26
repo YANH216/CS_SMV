@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useRef } from 'react'
-import socket from '../../ws'
+import socket from '../../../ws'
 
 const Chat = React.memo(() => {
 

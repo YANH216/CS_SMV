@@ -1,54 +1,35 @@
-import { useState, useEffect } from 'react'
-import { Layout, Menu, theme } from "antd"
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect, lazy, Suspense } from 'react'
+import { useNavigate, Routes, Route, Navigate } from 'react-router-dom'
+import { Layout, Menu } from "antd"
 import { reqHomeContentData } from '../../http'
+import Chat from './chat/Chat'
 import styles from './Home.module.css'
+import Loading from '../dialog/Dialog'
 
+const THREEJS = lazy(() => import('./threejs'))
 const { Header, Content, Footer } = Layout
 
 export default function Home() {
 	const navigate = useNavigate()
 
-	const [homeContent, setHomeContent] = useState([])
-	const [homeBtn, setHomeBtn] = useState([])
+	const [homeData, setHomeData] = useState({})
+	const [currentSelect, setCurrentSelect] = useState('')
 
 	const getHomeContent = async () => {
 		const res = await reqHomeContentData()
-		setHomeContent(res.homeContentData)
-		setHomeBtn(res.homeButtonData)
+		// 此处省略判断返回数据是否有效
+		setHomeData(res)
+	}
+
+	const handleNavChange = (e) => {
+		console.log('click', e.key);
+		navigate('/home/chat')
 	}
 
 	useEffect(() => {
 		getHomeContent()
-	} ,[])
+	}, [])
 
-	
-
-	const handleClickRouteChange = (id) => {
-		console.log(id);
-		navigate(`/${id}`, {replace: true})
-	}
-	const {
-		token: { colorBgContainer },
-	} = theme.useToken()
-	const items = [
-		{
-			label: '首页',
-			key: 0,
-		},
-		{
-			label: '日本动漫',
-			key: 1,
-		},
-		{
-			label: '欧美动漫',
-			key: 3,
-		},
-		{
-			label: '动漫电影',
-			key: 4,
-		},
-	]
   return (
     <div className={styles.home}>
 			<Layout className='layout'>
@@ -63,43 +44,24 @@ export default function Home() {
 						theme='light'
 						mode='horizontal'
 						defaultSelectedKeys={['1']}
-						items={items}
+						items={homeData.navigationBar}
+						onClick={handleNavChange}
 					/>
 				</Header>
 				<Content style={{ padding: '10px' }}>
-					<div 
-						className={styles.siteLayoutContent}
-						style={{ background: colorBgContainer }}
-					>
-						<div className={styles.recommend}>
-							<div className={styles.recommendHeader}>
-								<span className='recommendHeader-left'>recommend</span>
-								<span className='recommendHeader-right'>recommend</span>
-							</div>
-							<div className={styles.recommendContent}>
-								{
-									homeContent.map(item => (
-										<div 
-											className={styles.recommendContentItem} 
-											key={item.id}
-										>{item.content}
-										</div>
-									))
-								}
-							</div>
-						</div>
-					</div>
+					<Routes>
+						<Route index element={<Navigate to="threejs"/>}/>
+						<Route 
+							path='threejs' 
+							element={
+								<Suspense fallback={<Loading content='Loading'/>}>
+									<THREEJS homeData={homeData}/>
+								</Suspense>	
+							}
+						/>
+						<Route path='chat' element={<Chat/>}/>
+					</Routes>
 				</Content>
-				{
-					homeBtn.map((item) => 
-						<button 
-							key={item.id}
-							className={item.className} 
-							onClick={() => handleClickRouteChange(item.id)}
-						>点击跳转{item.content}界面
-						</button>
-					)
-				}
 				<Footer 
 					style={{
 						textAlign: 'center',
