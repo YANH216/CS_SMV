@@ -2,19 +2,23 @@
     "navigationBar": [
         {
             "key": "01",
-            "label": "THREEJS"
+            "label": "THREEJS",
+            "path": "/threejs"
         },
         {
             "key": "02",
-            "label": "WEBSOCKET"
+            "label": "WEBSOCKET",
+            "path": "/chat"
         },
         {
             "key": "03",
-            "label": "..."
+            "label": "...",
+            "path": "/"
         },
         {
             "key": "04",
-            "label": "..."
+            "label": "...",
+            "path": "/"
         }
     ],
     "homeContentData": [
@@ -66,33 +70,27 @@
     "homeButtonData": [
         {
             "id": "three",
-            "content": "three",
-            "className": "btn-LinkToThree"
+            "content": "three"
         },
         {
             "id": "gsap",
-            "content": "gsap",
-            "className": "btn-LinkToGsap"
+            "content": "gsap"
         },
         {
             "id": "meshStandardMaterial",
-            "content": "meshStandardMaterial",
-            "className": "btn-LinkToMeshStandardMaterial"
+            "content": "meshStandardMaterial"
         },
         {
             "id": "lightAndShadow",
-            "content": "LightAndShadow",
-            "className": "btn-LinkToLightAndShadow"
+            "content": "LightAndShadow"
         },
         {
             "id": "hdr",
-            "content": "Hdr",
-            "className": "btn-LinkToHdr"
+            "content": "Hdr"
         },
         {
             "id": "room",
-            "content": "Room",
-            "className": "btn-LinkToRoom"
+            "content": "Room"
         }
     ],
     "status": "200"

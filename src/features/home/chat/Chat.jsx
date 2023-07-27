@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState, useRef } from 'react'
 import socket from '../../../ws'
+import styles from './Chat.module.css'
 
 const Chat = React.memo(() => {
-
 
 	socket.addEventListener('open', () => {
 		console.log('welcome')
@@ -16,7 +16,7 @@ const Chat = React.memo(() => {
 		inputChatRef.current.value = ""
 	}
   return (
-    <div>
+    <div className={styles.chatContent}>
       <input 
         type="text" 
         className="input" 

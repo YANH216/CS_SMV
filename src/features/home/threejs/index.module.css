@@ -1,8 +1,4 @@
-.siteLayoutContent {
-  width: 80%;
-  height: 100%;
-  margin: auto;
-}
+
 .recommend {
   width: 100%;
 }
@@ -39,7 +35,7 @@
   flex: auto;
 }
 
-button {
+.btn {
   width: 19%;
   margin-top: 20px;
   height: 50px;
