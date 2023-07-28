@@ -27,16 +27,13 @@
   width: 98%;
   margin: 1%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
-}
-.buttonGroup::after {
-  content: '';
-  flex: auto;
 }
 
 .btn {
   width: 19%;
   margin-top: 20px;
+
   height: 50px;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import * as THREE from 'three'
+import * as THREE from 'three/src/Three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
 export default function Room() {

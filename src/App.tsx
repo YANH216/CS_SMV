@@ -7,6 +7,7 @@ import MeshStandardMaterial from './pages/meshStandardMaterial';
 import LightAndShadow from './pages/lightAndShadow/LightShadow';
 import HDR from './pages/hdr/HDR';
 import Room from './pages/room/Room';
+import SkyWater from './pages/skyAndWater/SkyWater';
 import './App.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path='/lightAndShadow' element= { <LightAndShadow/> }/>
         <Route path='/hdr' element= { <HDR/> }/>
         <Route path='/room' element= { <Room/> }/>
+        <Route path='/skyAndWater' element= { <SkyWater/> }/>
       </Routes>
     </div>
   );

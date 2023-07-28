@@ -91,6 +91,10 @@
         {
             "id": "room",
             "content": "Room"
+        },
+        {
+            "id": "skyAndWater",
+            "content": "SkyAndWater"
         }
     ],
     "status": "200"

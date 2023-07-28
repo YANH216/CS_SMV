@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import * as THREE from 'three'
+// 直接引用Three包中的Three.d.ts  不然没有代码补全(原因不明)
+import * as THREE from 'three/src/Three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
 

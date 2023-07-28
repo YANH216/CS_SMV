@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import * as THREE from 'three'
+import * as THREE from 'three/src/Three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import Dialog from '../../features/dialog/Dialog'
 
