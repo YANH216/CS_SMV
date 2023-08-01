@@ -95,6 +95,10 @@
         {
             "id": "skyAndWater",
             "content": "SkyAndWater"
+        },
+        {
+            "id": "meshPhongMaterial",
+            "content": "MeshPhongMaterial"
         }
     ],
     "status": "200"

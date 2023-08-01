@@ -8,6 +8,8 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { Water } from 'three/addons/objects/Water.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 import { initGUI } from '../../utils/skyAndWaterGUI';
+import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
+import { domAddToCanvas } from '../../utils/domAddToCanvas';
 
 
 export default function SkyWater() {
@@ -20,7 +22,9 @@ export default function SkyWater() {
 
   const scene = new THREE.Scene()
   const renderer = new THREE.WebGLRenderer()
+  const renderer2D = new CSS2DRenderer()
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 20000)
+  // 只作用于WebGLRenderer渲染出来的元素
   const controls = new OrbitControls(camera, renderer.domElement)
 
   // water
@@ -98,32 +102,35 @@ export default function SkyWater() {
   }
 
   // SpriteMaterial  总是面向屏幕的材质
-  const btnMaterial = new THREE.SpriteMaterial({  
-    color: 0xffffff,
-    sizeAttenuation: false
-  })
-  const btn = new THREE.Sprite(btnMaterial)
-  btn.name = 'btnLinkToHome'
-  btn.scale.setScalar(0.1)
-  scene.add(btn)
+  // const btnMaterial = new THREE.SpriteMaterial({  
+  //   color: 0xffffff,
+  //   sizeAttenuation: false
+  // })
+  // const btn = new THREE.Sprite(btnMaterial)
+  // btn.name = 'btnLinkToHome'
+  // btn.scale.setScalar(0.1)
+  // scene.add(btn)
+
+
+  // raycaster获取不到CSS2DRenderer渲染出来的html标签元素
 
   // 3D元素添加点击事件
-  const raycaster = new THREE.Raycaster()
-  const mouse = new THREE.Vector2()
+  // const raycaster = new THREE.Raycaster()
+  // const mouse = new THREE.Vector2()
 
-  const onMouseClick = (e) => {
-    console.log('click');
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1
-    mouse.y = - (e.clientY / window.innerHeight) * 2 + 1
+  // const onMouseClick = (e) => {
+  //   console.log('click');
+  //   mouse.x = (e.clientX / window.innerWidth) * 2 - 1
+  //   mouse.y = - (e.clientY / window.innerHeight) * 2 + 1
 
-    raycaster.setFromCamera( mouse, camera )
+  //   raycaster.setFromCamera( mouse, camera )
 
-    const intersects = raycaster.intersectObjects( scene.children )
-    console.log('intersects', intersects[0].object);
-    if (intersects[0].object.type === 'Sprite' && intersects[0].object.name === 'btnLinkToHome') {
-      handleClickBackHome()
-    }
-  }
+  //   const intersects = raycaster.intersectObjects( scene.children )
+  //   console.log('intersects', intersects);
+  //   if (intersects[0].object.type === 'Sprite' && intersects[0].object.name === 'btnLinkToHome') {
+  //     handleClickBackHome()
+  //   }
+  // }
 
 
   const init = () => {
@@ -132,7 +139,42 @@ export default function SkyWater() {
     renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.toneMapping = THREE.ACESFilmicToneMapping
+    // 色调曝光级别
     renderer.toneMappingExposure = 0.5
+    
+    // renderer2D.setSize(window.innerWidth, window.innerHeight)
+    // renderer2D.domElement.style.position = 'absolute'
+    // renderer2D.domElement.style.top = '0px'
+    // // 让CSS2DRenderer的dom元素不会成为点击事件的目标(当后代元素设置该属性值,鼠标点击事件会直接指向该后代元素)
+    // renderer2D.domElement.style.pointerEvents = 'none'
+
+
+    // const btn = document.getElementById('button2D')
+    // // 让btn成为点击事件的目标
+    // btn.style.pointerEvents = 'auto'
+    // const btn2D = new CSS2DObject(btn)
+
+    // 定义dom自定义对象参数，
+    // dom: 需要转换成CSS2D的元素  
+    // renderer2D: 需要包装的2D渲染器
+    const domObject = {
+      dom: document.getElementById('button2D'),
+      renderer2D
+    }
+    // 传入相应参数，执行对应函数，将普通的dom元素转换成CSS2D元素 即domAddToCanvas
+    // 返回值dom2DObject: { dom2D, renderer2D }
+    // dom2D: 转换之后的dom元素
+    // renderer2D: 包装之后的2D渲染器
+    const dom2DObject = domAddToCanvas(domObject)
+
+    // 将dom2D即转换后的dom 添加进场景
+    // 将dom2D添加到摄像机上 在视角变换时使元素相对于屏幕静止
+    // 将dom2D添加到摄像机之后，样式与一般dom元素设置方式相同
+    camera.add(dom2DObject.dom2D)
+    
+    // 
+    container.appendChild(dom2DObject.renderer2D.domElement)
+
     container.appendChild(renderer.domElement)
 
     camera.position.set(30, 30, 100)
@@ -147,7 +189,7 @@ export default function SkyWater() {
 
     window.addEventListener('resize', onWindowResize)
     // 监听点击事件
-    window.addEventListener('click', onMouseClick)
+    // window.addEventListener('click', onMouseClick)
   }
 
   const onWindowResize = () => {
@@ -155,6 +197,7 @@ export default function SkyWater() {
     camera.updateProjectionMatrix();
 
     renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer2D.setSize( window.innerWidth, window.innerHeight );
   }
 
   const animate = () => {
@@ -169,10 +212,11 @@ export default function SkyWater() {
     box.rotation.x = time * 0.5
     box.rotation.z = time * 0.51
 
-    btn.position.y = Math.sin( time ) * 20 + 55
+    // btn.position.y = Math.sin( time ) * 20 + 55
     water.material.uniforms[ 'time' ].value += 1.0 / 60.0
 
     renderer.render(scene, camera)
+    // renderer2D.render(scene, camera)
   }
 
 
@@ -181,16 +225,19 @@ export default function SkyWater() {
     const destroyGUI = initGUI(parameters, updateSun, water.material.uniforms)
     return () => {
       window.removeEventListener('resize', onWindowResize)
-      window.removeEventListener('click', onMouseClick)
+      // window.removeEventListener('click', onMouseClick)
       destroyGUI()
     }
   }, [])
 
   return (
     <>
-      <span>PAGE SkyWater</span>
-      <button onClick={handleClickBackHome}>back Home</button>
-      <div id="WebGL-output"></div>
+      <div id="WebGL-output">
+        <div id="button2D">
+          <span>PAGE SkyWater</span>
+          <button onClick={handleClickBackHome}>back Home</button>
+        </div>
+      </div>
     </>
   )
 }

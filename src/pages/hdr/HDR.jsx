@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import * as THREE from 'three/src/Three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
+import { domAddToCanvas } from '../../utils/domAddToCanvas';
 
 export default function HDR() {
 
@@ -14,6 +16,8 @@ export default function HDR() {
   const aspect = window.innerWidth / window.innerHeight
   const camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000)
   const renderer = new THREE.WebGLRenderer()
+  // 创建2D渲染器
+  const renderer2D = new CSS2DRenderer()
   const scene = new THREE.Scene()
   
   
@@ -23,6 +27,26 @@ export default function HDR() {
     const axesHelper = new THREE.AxesHelper( 5 )
 
     const container = document.getElementById("WebGL-output")
+
+    // 定义dom自定义对象参数，
+    // dom: 需要转换成CSS2D的元素  
+    // renderer2D: 需要包装的2D渲染器
+    const domObject = {
+      dom: document.getElementById('button2D'),
+      renderer2D
+    }
+    // 传入相应参数，执行对应函数，将普通的dom元素转换成CSS2D元素 即domAddToCanvas
+    // 返回值dom2DObject: { dom2D, renderer2D }
+    // dom2D: 转换之后的dom元素
+    // renderer2D: 包装之后的2D渲染器
+    const dom2DObject = domAddToCanvas(domObject)
+
+    // 将dom2D即转换后的dom 添加进场景
+    // 将dom2D添加到摄像机上 在视角变换时使元素相对于屏幕静止
+    // 将dom2D添加到摄像机之后，样式与一般dom元素设置方式相同
+    camera.add(dom2DObject.dom2D)
+    container.appendChild(dom2DObject.renderer2D.domElement)
+
     container.appendChild( renderer.domElement )
     
     
@@ -57,6 +81,7 @@ export default function HDR() {
     camera.updateProjectionMatrix()
     // 更新渲染器
     renderer.setSize(window.innerWidth, window.innerHeight)
+    renderer2D.setSize( window.innerWidth, window.innerHeight );
 
     renderer.setPixelRatio( window.devicePixelRatio )
   }
@@ -84,8 +109,10 @@ export default function HDR() {
   return (
     <>
       <div id="WebGL-output">
-        <span>PAGE HDR</span>
-        <button onClick={handleClickBackHome}>back Home</button>
+        <div id="button2D">
+          <span>PAGE HDR</span>
+          <button onClick={handleClickBackHome}>back Home</button>
+        </div>
       </div>
     </>
   )
