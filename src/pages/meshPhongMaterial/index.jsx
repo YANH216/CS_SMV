@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
 import { domAddToCanvas } from '../../utils/domAddToCanvas';
+import { initGUI } from '../../utils/GUI/meshPhongMaterialGUI';
 
 export default function MeshPhongMaterial() {
   const navigate = useNavigate()
@@ -20,8 +21,12 @@ export default function MeshPhongMaterial() {
   // 只作用于WebGLRenderer渲染出来的元素
   const controls = new OrbitControls(camera, renderer.domElement)
 
+  let destroy
+
   const init = () => {
     const container = document.getElementById('WebGL-output')
+
+    camera.position.set(0, 0, -2000)
 
     // 定义dom自定义对象参数，
     // dom: 需要转换成CSS2D的元素  
@@ -58,15 +63,19 @@ export default function MeshPhongMaterial() {
     scene.background = textureCube
 
     // 设置光
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 3.5)
     scene.add(ambientLight)
 
     const cubeMaterial = new THREE.MeshPhongMaterial({
       color: 0xffffff,
       envMap: textureCube,
+      // 折射比
       refractionRatio: 0.98,
+      // 反射率
       reflectivity: 0.9
     })
+
+    destroy = initGUI(cubeMaterial, ambientLight)
 
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -88,6 +97,9 @@ export default function MeshPhongMaterial() {
     geometry.computeVertexNormals()
 
     const mesh = new THREE.Mesh(geometry, material)
+
+    // 初始化GUI
+    // const destroy = initGUI(mesh)
     // mesh.scale.setScalar(1.5)
     scene.add(mesh)
   }
@@ -107,13 +119,14 @@ export default function MeshPhongMaterial() {
   }
 
   const render = () => {
+    camera.lookAt(scene.position)
     renderer.render( scene, camera );
   }
 
   useEffect(() => {
     init()
     return () => {
-
+      destroy()
     }
   }, [])
   return (

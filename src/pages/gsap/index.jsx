@@ -5,7 +5,7 @@ import { gsap } from 'gsap'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import { domAddToCanvas } from '../../utils/domAddToCanvas';
-import { initGUI } from '../../utils/gaspGui'
+import { initGUI } from '../../utils/GUI/gaspGui'
 import styles from './index.module.css'
 
 export default function Gsap() {

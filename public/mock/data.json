@@ -99,6 +99,10 @@
         {
             "id": "meshPhongMaterial",
             "content": "MeshPhongMaterial"
+        },
+        {
+            "id": "car",
+            "content": "car"
         }
     ],
     "status": "200"

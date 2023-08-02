@@ -7,7 +7,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { Water } from 'three/addons/objects/Water.js';
 import { Sky } from 'three/addons/objects/Sky.js';
-import { initGUI } from '../../utils/skyAndWaterGUI';
+import { initGUI } from '../../utils/GUI/skyAndWaterGUI';
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import { domAddToCanvas } from '../../utils/domAddToCanvas';
 

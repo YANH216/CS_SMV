@@ -9,6 +9,7 @@ import HDR from './pages/hdr/HDR';
 import Room from './pages/room/Room';
 import SkyWater from './pages/skyAndWater/SkyWater';
 import MeshPhongMaterial from './pages/meshPhongMaterial';
+import Car from './pages/car';
 import './App.css';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path='/room' element= { <Room/> }/>
         <Route path='/skyAndWater' element= { <SkyWater/> }/>
         <Route path='/meshPhongMaterial' element= { <MeshPhongMaterial/> }/>
+        <Route path='/car' element= { <Car/> }/>
       </Routes>
     </div>
   );
