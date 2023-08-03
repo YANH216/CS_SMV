@@ -1,0 +1,17 @@
+#colorPicker {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  position: absolute;
+  margin: auto;
+  left: 50%;
+  top: 5%;
+  transform: translateX(-50%);
+}
+span {
+  color: #FFF;
+  padding: 2px;
+}
+input {
+  margin: 5px;
+}
