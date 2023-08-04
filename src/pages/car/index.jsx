@@ -192,6 +192,8 @@ export default function Car() {
     renderer2D.setSize( window.innerWidth, window.innerHeight )
   }
 
+
+
   const render = () => {
     controls.update()
 
@@ -223,12 +225,22 @@ export default function Car() {
     }
   }
 
+  // clear  清除导入模型及网格模型缓存
+  const clear = () => {
+    renderer.dispose()
+    camera.clear()
+    grid.clear()
+    scene.children.forEach((item) => {
+      return item.clear()
+    })
+  }
+
 
 
   useEffect(() => {
     init()
     return () => {
-      
+      clear()
     }
   }, [])
 

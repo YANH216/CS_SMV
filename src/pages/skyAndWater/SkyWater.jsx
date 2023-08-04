@@ -158,7 +158,9 @@ export default function SkyWater() {
     // dom: 需要转换成CSS2D的元素  
     // renderer2D: 需要包装的2D渲染器
     const domObject = {
-      dom: document.getElementById('button2D'),
+      dom: [
+        document.getElementById('button2D')
+      ],
       renderer2D
     }
     // 传入相应参数，执行对应函数，将普通的dom元素转换成CSS2D元素 即domAddToCanvas
@@ -219,6 +221,20 @@ export default function SkyWater() {
     // renderer2D.render(scene, camera)
   }
 
+  // clear  清除导入模型及网格模型缓存
+  const clear = () => {
+    console.log(water);
+    camera.remove()
+    renderer.dispose()
+    water.material.dispose()
+    waterGeometry.dispose()
+    boxGeometry.dispose()
+    boxMaterial.dispose()
+    scene.children.forEach((item) => {
+      return item.remove()
+    })
+  }
+
 
   useEffect(() => {
     init()
@@ -227,6 +243,8 @@ export default function SkyWater() {
       window.removeEventListener('resize', onWindowResize)
       // window.removeEventListener('click', onMouseClick)
       destroyGUI()
+      // 清除缓存
+      clear()
     }
   }, [])
 
