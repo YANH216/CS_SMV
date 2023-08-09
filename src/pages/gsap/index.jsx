@@ -244,7 +244,7 @@ export default function Gsap() {
 
   // 点击按钮页面跳转
   const handleClickBackHome = () => {
-    navigate('/', {replace: true})
+    navigate('/home', {replace: true})
   } 
 
   // 点击按钮控制动画

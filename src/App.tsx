@@ -1,5 +1,6 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Counter from './features/counter/Counter';
+import First from './features/First';
 import Home from './features/home/Home';
 import Three from './pages/three';
 import Gsap from './pages/gsap';
@@ -16,7 +17,8 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route index element= { <Navigate to='/home'/> } />
+        <Route index element= { <Navigate to='/first'/> } />
+        <Route path='/first' element={<First/>}/>
         <Route path='/home/*' element= { <Home/> } />
         <Route path='/three' element= { <Three/> }/>
         <Route path='/gsap' element= { <Gsap/> }/>

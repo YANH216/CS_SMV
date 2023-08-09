@@ -10,7 +10,7 @@ export const domAddToCanvas = ({dom, renderer2D}) => {
   // 让CSS2DRenderer的dom元素不会成为点击事件的目标(当后代元素设置该属性值,鼠标点击事件会直接指向该后代元素)
   renderer2D.domElement.style.pointerEvents = 'none'
 
-  const dom2D = dom&&dom.forEach((item) => {
+  const dom2D = dom && dom.forEach((item) => {
     return (
       item.style.pointerEvents = 'auto',
       // item.style.backgroundColor = '#FFF',

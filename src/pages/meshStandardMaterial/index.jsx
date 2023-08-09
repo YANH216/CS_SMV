@@ -42,7 +42,7 @@ export default function MeshStandardMaterial() {
 	const navigate = useNavigate()
 
 	const handleClickBackHome = () => {
-		navigate('/', {replace: true})
+		navigate('/home', {replace: true})
 	}
 	// 创建坐标系
 	const axesHelper = new THREE.AxesHelper( 5 )

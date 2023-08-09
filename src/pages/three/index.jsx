@@ -21,7 +21,7 @@ export default function Three() {
   const navigate = useNavigate()
   
   const handleClickBackHome = () => {
-    navigate('/', {replace: true})
+    navigate('/home', {replace: true})
   }
   // 创建时钟
   const clock = new THREE.Clock()

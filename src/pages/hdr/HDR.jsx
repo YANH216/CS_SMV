@@ -10,7 +10,7 @@ export default function HDR() {
 
   const navigate = useNavigate()
   const handleClickBackHome = () => {
-    navigate('/', {replace: true})
+    navigate('/home', {replace: true})
   }
 
   const aspect = window.innerWidth / window.innerHeight

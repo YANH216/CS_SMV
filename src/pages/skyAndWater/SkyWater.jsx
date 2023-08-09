@@ -17,7 +17,7 @@ export default function SkyWater() {
   const navigate = useNavigate()
 
   const handleClickBackHome = () => {
-    navigate('/', {replace: true})
+    navigate('/home', {replace: true})
   }
 
   const scene = new THREE.Scene()

@@ -10,7 +10,7 @@ import { initGUI } from '../../utils/GUI/meshPhongMaterialGUI';
 export default function MeshPhongMaterial() {
   const navigate = useNavigate()
   const handleClickBackHome = () => {
-    navigate('/', { replace: true })
+    navigate('/home', { replace: true })
   }
 
   const scene = new THREE.Scene()

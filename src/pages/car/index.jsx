@@ -14,7 +14,7 @@ import './index.css'
 export default function Car() {
   const navigate = useNavigate()
   const handleClickBackHome = () => {
-    navigate('/', { replace: true })
+    navigate('/home', { replace: true })
   }
 
   const renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -50,7 +50,7 @@ export default function Car() {
   const shadow = new THREE.TextureLoader().load('./textures/car/ferrari_ao.png')
 
   const dracoLoader = new DRACOLoader()
-  dracoLoader.setDecoderPath('./textures/car/draco/gltf/')
+  dracoLoader.setDecoderPath('./textures/draco/gltf/')
   
   const loader = new GLTFLoader()
   loader.setDRACOLoader( dracoLoader )

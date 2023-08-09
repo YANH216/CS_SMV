@@ -10,10 +10,13 @@ const THREEJS = lazy(() => import('./threejs'))
 const { Header, Content, Footer } = Layout
 
 export default function Home() {
+	// 保存navigationbar所选的key
+	const data = sessionStorage.getItem('currentSelect')
+
 	const navigate = useNavigate()
 
 	const [homeData, setHomeData] = useState({})
-	const [currentSelect, setCurrentSelect] = useState('01')
+	const [currentSelect, setCurrentSelect] = useState(data?data:'01')
 
 	// 导航栏选项
 	const items = homeData.navigationBar
@@ -37,6 +40,9 @@ export default function Home() {
 		// console.log(item);
 
 		setCurrentSelect(e.key)
+
+		sessionStorage.setItem('currentSelect', e.key)
+
 		// 跳转路由对应页面
 		navigate(`/home${item.path}`)
 
